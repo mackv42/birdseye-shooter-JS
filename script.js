@@ -1,27 +1,4 @@
-//TODO change zombies and bullet lists into a hashset 
-// for faster collision checking
-//  Key of hash would represent where an entity is on the map
-Object.prototype.renameProperty = function (oldName, newName) {
-     // Do nothing if the names are the same
-     if (oldName == newName) {
-         return this;
-     }
-    // Check for the old property name to avoid a ReferenceError in strict mode.
-    if (this.hasOwnProperty(oldName)) {
-        this[newName] = this[oldName];
-        delete this[oldName];
-    }
-    return this;
-};
-
-
-var obj = function( x, y, dir ){
-    this.x = x;
-    this.y = y;
-    this.dir = dir;
-}
-
-var zombie = function(x, y, speed, dam, health){
+var zombie = function(x, y, speed, dam, health, img){
 	this.x = x;
 	this.y = y;
 	this.speed = speed;
@@ -228,20 +205,6 @@ function updateBoxes(){
     }
 }
 
-canvas.addEventListener("mousedown", function(){p1.shoot();});
-
-function handler(event){ 
-    var x = event.clientX - c_x;
-    var y = event.clientY - c_y;
-
-    var dx = (centerX-x);
-    var dy = (centerY-y);
-
-    p1.dir = direction(dx, dy);
-}
-
-canvas.addEventListener("mousemove", handler);
-
 zombie.prototype.draw = function(){
     context.save();
     context.translate(centerX+this.x - p1.x, centerY+this.y - p1.y);
@@ -317,42 +280,5 @@ function updateBullets(){
 }
 
 //
-var side = Math.sqrt(50);
-
-character.prototype.update = function(){
-    var only = true;
-    if (Key.isDown(Key.UP)){
-        this.y -= this.speed;
-
-        if(Key.isDown(Key.LEFT)){
-            this.y += side;
-            this.x -= side;
-            only = false;
-        }
-
-        if(Key.isDown(Key.RIGHT)){
-            this.y += side;
-            this.x += side;
-            only = false;
-        } 
-    } else if (Key.isDown(Key.DOWN)){ 
-        this.y += this.speed;
-        if(Key.isDown(Key.LEFT)){
-            this.y -= side;
-            this.x -= side;
-            only = false;
-        }
-
-        if(Key.isDown(Key.RIGHT)){
-            this.y -= side;
-            this.x += side;
-            only = false;
-        }              
-    }
-
-  if (Key.isDown(Key.LEFT) && only) this.x -= this.speed;
-  if (Key.isDown(Key.RIGHT) && only) this.x += this.speed;
-}
-
 
 ///////////////////////////////////////////////////////////////
