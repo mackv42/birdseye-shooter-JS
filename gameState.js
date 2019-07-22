@@ -35,3 +35,45 @@ function handleResize(){
     c_x = c_pos.left;
     c_y = c_pos.top;
 }
+
+var lose = false;
+function loseScreen(){
+    //clear();
+    document.getElementById("loseScreen").style.display = 'block';
+    document.getElementById("loseScreen").style.top = c_y.toString() + 'px';
+    document.getElementById("loseScreen").style.left = c_x.toString() + 'px';
+    //Ask to restart
+}
+
+
+var pbutton = false;
+
+pauseButton.addEventListener('click', function(){
+    if(pbutton){
+        pbutton = false;
+    } else{
+        pbutton = true;
+    }
+});
+
+resetButton.addEventListener('click', function(){
+    lose = true;
+    p1.x = 0;
+    p1.y = 0;
+    p1.health = 100;
+    healthBar.innerHTML = 100;
+    ammo = 110;
+    ammoBar.innerHTML = 110;
+
+    AboxList = [];
+    spawnBoxes(5, 3000, 3000);
+
+    zombies = [];
+    numZombies = 100;
+    zombieBar.innerHTML = numZombies;
+    createZombies(numZombies, 3000, 3000);
+    lose = false;
+    document.getElementById("loseScreen").style.display = 'none';
+    drawLoop();
+    
+});

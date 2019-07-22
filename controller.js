@@ -72,4 +72,7 @@ character.prototype.update = function(){
 
   if (Key.isDown(Key.LEFT) && only) this.x -= this.speed;
   if (Key.isDown(Key.RIGHT) && only) this.x += this.speed;
+  if(this.health < 0){
+    lose = true;
+  }
 }

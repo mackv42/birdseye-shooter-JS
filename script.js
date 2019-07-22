@@ -74,7 +74,7 @@ zombie.prototype.attack = function(player){
 
     if(player.health <= 0){
         // Restart Game
-        lose = true;
+        //lose = true;
     }
 }
 
