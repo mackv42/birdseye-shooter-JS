@@ -15,93 +15,10 @@ Object.prototype.renameProperty = function (oldName, newName) {
 };
 
 
-var RAD = Math.PI / 180;
-var ninety = .5*Math.PI;
-var lose = false;
-
-function getRandomArbitrary(min, max){
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-function direction(dx, dy){
-    let dir = 0;
-    if(dx > 0){
-        dir = -(Math.atan(dx/dy));
-
-        if(dy < 0){
-            dir = dir+Math.PI;
-        }
-    } else{
-        dir = Math.atan(dy/dx) + .5*Math.PI;
-    }
-
-    return dir;
-}
-
-var loseCtx = document.getElementById("loseScreen").getContext("2d");
-loseCtx.fillStyle = "#FF0000"
-loseCtx.font = "100px Arial";
-loseCtx.fillText("You Lose", 30, 75); 
-
-var healthBar = document.getElementById('health');
-var health = 100;
-
-var pauseButton = document.getElementById('pause');
-var resetButton = document.getElementById('reset');
-
-var ammoBar = document.getElementById('ammo');
-var ammo = 110;
-
-var zombieBar = document.getElementById('zombies');
-var numZombies = 100;
-
-healthBar.innerHTML = health;
-ammoBar.innerHTML = ammo;
-zombieBar.innerHTML = numZombies;
-
-// Put in onload
-var canvas = document.getElementById('can');
-var context = canvas.getContext('2d');
-
-var centerX = canvas.width/2;
-var centerY = canvas.height/2;
-
-var c_pos = canvas.getBoundingClientRect();
-var c_x = c_pos.left;
-var c_y = c_pos.top;
-
-function handleResize(){
-    c_pos = canvas.getBoundingClientRect();
-    c_x = c_pos.left;
-    c_y = c_pos.top;
-}
-
-function clear(){
-    context.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-var PleftFoot = new Image();
-PleftFoot.src = './Resources/PlayerLeftFoot.png';
-
-var playerWalk = [];
-
-PleftFoot.onload = function(){
-  playerWalk.push(PleftFoot);
-}
-
-var Pstill = new Image();
-Pstill.src = './Resources/newone.png';
-
-Pstill.onload = function(){
-  playerWalk.push(PleftFoot);
-}
-
-var PrightFoot = new Image();
-PrightFoot.src = './Resources/PlayerRightFoot.png';
-
-
-PrightFoot.onload = function(){
-  playerWalk.push(PrightFoot);
+var obj = function( x, y, dir ){
+    this.x = x;
+    this.y = y;
+    this.dir = dir;
 }
 
 var zombie = function(x, y, speed, dam, health){
@@ -118,7 +35,6 @@ var zombie = function(x, y, speed, dam, health){
 zombie.prototype.move = function(x, y){
     this.x += x;
     this.y += y;
-
     this.midpointX += x;
     this.midpointY += y;
 }
@@ -185,11 +101,6 @@ zombie.prototype.attack = function(player){
     }
 }
 
-var zombieLeftFoot = new Image();
-zombieLeftFoot.src = "./Resources/zombie2.png";
-zombieLeftFoot.onload = function(){
-
-}
 
 var csideY = Pstill.width/2;
 var csideX = Pstill.height/2;
@@ -204,12 +115,6 @@ var bullet = function(x, y, dir, speed, dam){
 }
 
 var bullets = [];
-
-var bulletImg = new Image();
-bulletImg.src = "./Resources/bullet2.png";
-bulletImg.onload = function(){
-
-}
 
 var bsideY = bulletImg.height/2;
 var bsideX = bulletImg.width/2;
@@ -287,9 +192,6 @@ var bulletBox = function(x, y, howMany){
     this.amount = howMany;
 }
 
-var ammoBox = new Image();
-ammoBox.src = './Resources/ammoBox.png';
-ammoBox.onload = function(){}
 
 bulletBox.prototype.draw = function(){ 
     context.save();
@@ -400,11 +302,6 @@ function updateBullets(){
                 }
                 bullets.splice(i, 1);
 
-        		/*zombies.splice(j, 1);
-
-                numZombies--;
-                zombieBar.innerHTML = numZombies;*/
-                
                 break;
         	}
 
@@ -419,35 +316,9 @@ function updateBullets(){
 	}
 }
 
-var Key = {
-  _pressed: {},
-
-  LEFT: 65,
-  UP: 87,
-  RIGHT: 68,
-  DOWN: 83,
-  
-  isDown: function(keyCode) {
-    return this._pressed[keyCode];
-  },
-  
-  onKeydown: function(event) {
-    this._pressed[event.keyCode] = true;
-  },
-  
-  onKeyup: function(event) {
-    delete this._pressed[event.keyCode];
-  }
-};
-
-
-////////////////////////////////////////////////////////////////////////////////
-window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
-window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 //
 var side = Math.sqrt(50);
 
-//Good So far
 character.prototype.update = function(){
     var only = true;
     if (Key.isDown(Key.UP)){
@@ -483,73 +354,5 @@ character.prototype.update = function(){
   if (Key.isDown(Key.RIGHT) && only) this.x += this.speed;
 }
 
-var map = new Image();
-map.src = "./Resources/Map.png";
 
-map.onload = function(){
-
-}
 ///////////////////////////////////////////////////////////////
-function loseScreen(){
-    //clear();
-    document.getElementById("loseScreen").style.display = 'block';
-    document.getElementById("loseScreen").style.top = c_y.toString() + 'px';
-    document.getElementById("loseScreen").style.left = c_x.toString() + 'px';
-    //Ask to restart
-}
-
-var pbutton = false;
-
-pauseButton.addEventListener('click', function(){
-    if(pbutton){
-        pbutton = false;
-    } else{
-        pbutton = true;
-    }
-});
-
-resetButton.addEventListener('click', function(){
-    lose = true;
-    p1.x = 0;
-    p1.y = 0;
-    p1.health = 100;
-    healthBar.innerHTML = 100;
-    ammo = 110;
-    ammoBar.innerHTML = 110;
-
-    AboxList = [];
-    spawnBoxes(5, 3000, 3000);
-
-    zombies = [];
-    numZombies = 100;
-    zombieBar.innerHTML = numZombies;
-    createZombies(numZombies, 3000, 3000);
-    lose = false;
-    document.getElementById("loseScreen").style.display = 'none';
-    drawLoop();
-    
-});
-
-function drawLoop(){
-    if(lose){
-        loseScreen();
-        return;
-    }
-
-    if(!lose){
-	   setTimeout(function loop(){requestAnimationFrame(drawLoop)}, 18); //18 milliseconds
-    }
-
-    if(!pbutton){
-        clear();
-        p1.update();
-        context.drawImage(map, centerX-p1.x, centerY-p1.y);
-        updateZombies(p1);
-        p1.draw();
-        updateBullets();
-        updateBoxes();
-
-    }
-}
-
-drawLoop();
