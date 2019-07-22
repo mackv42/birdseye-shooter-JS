@@ -1,5 +1,6 @@
 //TODO change zombies and bullet lists into a hashset 
 // for faster collision checking
+//  Key of hash would represent where an entity is on the map
 Object.prototype.renameProperty = function (oldName, newName) {
      // Do nothing if the names are the same
      if (oldName == newName) {
@@ -18,10 +19,29 @@ var RAD = Math.PI / 180;
 var ninety = .5*Math.PI;
 var lose = false;
 
-
 function getRandomArbitrary(min, max){
     return Math.floor(Math.random() * (max - min) + min);
 }
+
+function direction(dx, dy){
+    let dir = 0;
+    if(dx > 0){
+        dir = -(Math.atan(dx/dy));
+
+        if(dy < 0){
+            dir = dir+Math.PI;
+        }
+    } else{
+        dir = Math.atan(dy/dx) + .5*Math.PI;
+    }
+
+    return dir;
+}
+
+var loseCtx = document.getElementById("loseScreen").getContext("2d");
+loseCtx.fillStyle = "#FF0000"
+loseCtx.font = "100px Arial";
+loseCtx.fillText("You Lose", 30, 75); 
 
 var healthBar = document.getElementById('health');
 var health = 100;
@@ -109,15 +129,7 @@ zombie.prototype.circle = function(person){ // Circles around player
 
     //document.getElementById('tst').innerHTML = String(dx) + ' ' + String(dy);
 
-    if(dx > 0){
-        this.dir = -(Math.atan(dx/dy));
-
-        if(dy < 0){
-            this.dir = this.dir+Math.PI;
-        }
-    } else{
-        this.dir = Math.atan(dy/dx) + .5*Math.PI;
-    }   
+    this.dir = direction(dx, dy);
 
     dy = Math.sin(this.dir+Math.PI) * this.speed; // Might want to change these
     dx = Math.cos(this.dir+Math.PI) * this.speed; //
@@ -132,15 +144,7 @@ zombie.prototype.follow = function(person){
 
     //document.getElementById('tst').innerHTML = String(dx) + ' ' + String(dy);
 
-    if(dx > 0){
-        this.dir = -(Math.atan(dx/dy));
-
-        if(dy < 0){
-            this.dir = this.dir+Math.PI;
-        }
-    } else{
-        this.dir = Math.atan(dy/dx) + .5*Math.PI;
-    }   
+    this.dir = direction(dx, dy);
     
 
     //document.getElementById("tst").innerHTML = this.dir;
@@ -162,15 +166,7 @@ zombie.prototype.attack = function(player){
     var dy = this.y - player.y;
 
     var dir = 0;
-    if(dx > 0){
-        dir = -(Math.atan(dx/dy));
-
-        if(dy < 0){
-            dir = dir+Math.PI;
-        }
-    } else{
-        dir = Math.atan(dy/dx) + .5*Math.PI;
-    }
+    dir = direction(dx, dy);
 
     dy = Math.sin(dir-ninety)*15; // Might want to change these
     dx = Math.sqrt((15*15) - (dy*dy)); //
@@ -339,15 +335,7 @@ function handler(event){
     var dx = (centerX-x);
     var dy = (centerY-y);
 
-    if(dx > 0){
-        p1.dir = -(Math.atan(dx/dy));
-
-        if(dy < 0){
-            p1.dir = p1.dir+Math.PI;
-        }
-    } else{
-        p1.dir = Math.atan(dy/dx) + .5*Math.PI;
-    }
+    p1.dir = direction(dx, dy);
 }
 
 canvas.addEventListener("mousemove", handler);
