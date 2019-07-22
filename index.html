@@ -1,0 +1,72 @@
+<!-- Proto for regular perspective -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Zombie Center</title>
+	<style>
+		#can{
+			background-color: lightblue;
+            margin: 0 auto;
+            display: block;
+		}
+
+        #loseScreen{
+            background-color: rgb(200, 200, 200);
+            opacity: 0.5;
+            float: center;
+            position: absolute;
+            display: none;
+        }
+
+        #menu{
+            background-color: orange;
+            display: block;
+            margin: 0 auto;
+
+            width: 800px;
+            height: 75px;
+        }
+
+        span{
+            color: purple;
+        }
+
+        #divider{
+            margin-top: 0px;
+        }
+
+        #menu-title{
+            text-align: center;
+            padding-top: 3px;
+            margin-bottom: 0px;
+        }
+
+        #menu p{
+            display: inline-block;
+            margin: 0 auto;
+        }
+	</style>
+	<script type="text/javascript">
+
+	</script>
+
+</head>
+<body>
+	<canvas id="can" width="800" height="480"></canvas>
+    <canvas id='loseScreen' width='800' height='480' style='z-index: 3;'></canvas>
+    <div id="menu">
+        <h3 id="menu-title">Menu</h3>
+        <hr id="divider"></hr>
+        <p><b>Health: <span id="health"></span></b></p>
+        <p><b>Ammo: <span id="ammo"></span></b></p>
+        <p><b>Zombies: <span id='zombies'></span></b></p>
+        <br/>
+        <input type="button" id='pause' value='Pause'></input>
+        <input type='button' id='reset' value='Reset'></input>
+    </div>
+
+    <script type="text/javascript" src='script.js'>
+
+	</script>
+</body>
+</html>
