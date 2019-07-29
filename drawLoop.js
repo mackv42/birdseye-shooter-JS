@@ -43,17 +43,29 @@ function drawLoop(){
         setTimeout(drawLoop, 25);
     }
 
-    if(!pbutton){
+
         clear();
-        p1.update();
+        
         context.drawImage(map, centerX-p1.x, centerY-p1.y);
-        updateZombies(p1);
         p1.draw();
-        updateBullets();
+        zombies.map((x)=>{x.draw()});
+        bullets.map((x)=>{x.draw()});
+    
+}
+
+function updateLoop(){
+    if(!pbutton){
+        p1.update();
+        updateZombies(p1);
+         updateBullets();
         updateBoxes();
+    }
+    if(!lose){
+        setTimeout(updateLoop, 25);
     }
 }
 
 window.onload = ( () =>{
     drawLoop();
+    updateLoop();
 });

@@ -189,7 +189,6 @@ spawnBoxes(5, 3000, 3000);
 
 function updateBoxes(){
     for(let i=0; i!=AboxList.length; i++){
-        AboxList[i].draw();
         var dx = AboxList[i].x - p1.x;
         var dy = AboxList[i].y - p1.y;
 
@@ -239,8 +238,6 @@ function updateZombies(player){
         } else{
             zombies[i].follow(player);
         }
-
-        zombies[i].draw();
     };
 
     //HAVE TO optimise this
@@ -264,8 +261,7 @@ function updateZombies(player){
 function updateBullets(){
 	for(let i=0; i<bullets.length; i++){
 		bullets[i].update();
-		bullets[i].draw();
-
+		
 		for(let j=0; j<zombies.length; j++){ // Put bullet.update and zombie.update in one function
         	dy = zombies[j].midpointY-bullets[i].y; // Change so center is correct
         	dx = zombies[j].midpointX-bullets[i].x;
@@ -293,6 +289,12 @@ function updateBullets(){
             }
     	}
 	}
+}
+
+function drawList(arr){
+    for(let i=0; i<arr.length; i++){
+        arr[i].draw();
+    }
 }
 
 //
