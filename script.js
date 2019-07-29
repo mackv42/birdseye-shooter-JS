@@ -57,25 +57,10 @@ zombie.prototype.attack = function(player){
     //Push Back Player
     var dx = this.x - player.x;
     var dy = this.y - player.y;
-
-    var dir = 0;
-    dir = direction(dx, dy);
-
-    dy = Math.sin(dir-ninety)*15; // Might want to change these
-    dx = Math.sqrt((15*15) - (dy*dy)); //
-    player.move(dx, dy);
-    
-    if(dir < 0 || dir > Math.PI){
-        player.move(-2*dx, 0);
-    }
+    player.move(-0.5*dx, -0.5*dy);
 
     player.health -= this.dam;
     document.getElementById('health').innerHTML = player.health;
-
-    if(player.health <= 0){
-        // Restart Game
-        //lose = true;
-    }
 }
 
 
