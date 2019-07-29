@@ -234,7 +234,7 @@ function updateZombies(player){
         let dx = zombies[i].x - player.x;
         let distance = Math.sqrt((dy*dy)+(dx*dx));
         
-        if(distance < 40){
+        if(distance < 35){
             zombies[i].attack(player);
         } else{
             zombies[i].follow(player);
@@ -242,6 +242,22 @@ function updateZombies(player){
 
         zombies[i].draw();
     };
+
+    //HAVE TO optimise this
+    //Need to separate into another function
+    //called update hoarde
+    for(let j=0; j<zombies.length; j++){
+        for(let i=0; i < zombies.length; i++){
+            let dy = zombies[i].y - zombies[j].y;
+            let dx = zombies[i].x - zombies[j].x;
+            let distance = Math.sqrt(dy*dy+dx*dx);
+            if(distance < 30){
+                
+                //
+                zombies[j].move(-0.5*dx, -0.5*dy);
+            }
+        }
+    }
 }
 
 

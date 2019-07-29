@@ -1,31 +1,59 @@
-window.onload = ( () =>{
+var pbutton = false;
 
-
-    function clear(){
-        context.clearRect(0, 0, canvas.width, canvas.height);
+pauseButton.addEventListener('click', function(){
+    if(pbutton){
+        pbutton = false;
+    } else{
+        pbutton = true;
     }
+});
 
-    function drawLoop(){
-        if(lose){
-            loseScreen();
-            return;
-        }
+resetButton.addEventListener('click', function(){
+    lose = true;
+    p1.x = 0;
+    p1.y = 0;
+    p1.health = 100;
+    healthBar.innerHTML = 100;
+    ammo = 110;
+    ammoBar.innerHTML = 110;
 
-        if(!lose){
-            setTimeout(drawLoop, 18)
-        }
+    AboxList = [];
+    spawnBoxes(5, 3000, 3000);
 
-        if(!pbutton){
-            clear();
-            p1.update();
-            context.drawImage(map, centerX-p1.x, centerY-p1.y);
-            updateZombies(p1);
-            p1.draw();
-            updateBullets();
-            updateBoxes();
-        }
-    }
+    zombies = [];
+    numZombies = 100;
+    zombieBar.innerHTML = numZombies;
+    createZombies(numZombies, 3000, 3000);
+    lose = false;
+    document.getElementById("loseScreen").style.display = 'none';
     drawLoop();
-    //setInterval( () => { if(!lose) {drawLoop(); }, 18 );
+});
 
+function clear(){
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawLoop(){
+    if(lose){
+        loseScreen();
+        return;
+    }
+
+    if(!lose){
+        setTimeout(drawLoop, 25);
+    }
+
+    if(!pbutton){
+        clear();
+        p1.update();
+        context.drawImage(map, centerX-p1.x, centerY-p1.y);
+        updateZombies(p1);
+        p1.draw();
+        updateBullets();
+        updateBoxes();
+    }
+}
+
+window.onload = ( () =>{
+    drawLoop();
 });
